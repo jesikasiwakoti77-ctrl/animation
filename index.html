@@ -3,144 +3,336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Aishwarya's Cinematic Birthday ❤️</title>
 
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-/* Background */
-body{
-  margin:0;
-  overflow:hidden;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#ff758c,#ff7eb3);
+:root {
+  --primary-pink: #ff758c;
+  --soft-white: #fff5f6;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+  background: #000;
+  color: white;
+}
+
+/* Background Overlay */
+.overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Start Screen */
+#startScreen {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  text-align: center;
+}
+
+.start-btn {
+  padding: 15px 40px;
+  font-size: 20px;
+  background: white;
+  color: #ff758c;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+/* Global Controls */
+#controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: none; /* Shown after start */
+}
+
+.control-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid white;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 /* Floating Hearts */
-.heart{
-  position:fixed;
-  bottom:-50px;
-  font-size:24px;
-  opacity:0.6;
-  z-index:0;
+.heart {
+  position: fixed;
+  bottom: -50px;
+  font-size: 24px;
+  opacity: 0.6;
+  z-index: 0;
   animation: floatUp linear infinite;
 }
 
-@keyframes floatUp{
-  0%{transform:translateY(0);}
-  100%{transform:translateY(-110vh);}
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-110vh) rotate(360deg); }
 }
 
-/* Scene */
-.scene{
-  position:absolute;
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:20px;
-  opacity:0;
-  animation: fade 10s linear forwards;
-  z-index:2;
+/* Scenes */
+.scene {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 2;
+  text-align: center;
+  transition: opacity 1s ease;
 }
 
-/* Fade animation */
-@keyframes fade{
-  0%{opacity:0;}
-  10%{opacity:1;}
-  90%{opacity:1;}
-  100%{opacity:0;}
+.active {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-/* Text box */
-.text{
-  font-size:28px;
-  max-width:80%;
-  line-height:1.6;
-  color:black;
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
-  text-align:center;
-  z-index:3;
+/* Responsive Video Container */
+.video-container {
+  width: 90vw;
+  max-width: 450px; /* Optimized for phone-style videos */
+  max-height: 70vh;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(255, 117, 140, 0.5);
+  background: #000;
 }
 
-/* Smaller final text */
-.finalText{
-  font-size:22px;
+video {
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  display: block;
 }
 
-/* Photos */
-.photo{
-  width:260px;
-  height:260px;
-  object-fit:cover;
-  border-radius:25px;
-  animation: zoom 10s linear forwards;
-  box-shadow:0 0 15px rgba(0,0,0,0.4);
+/* Text boxes */
+.text {
+  font-size: clamp(16px, 4vw, 24px);
+  max-width: 85%;
+  line-height: 1.6;
+  color: #333;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-@keyframes zoom{
-  0%{transform:scale(1);}
-  100%{transform:scale(1.1);}
+.highlight {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(28px, 6vw, 40px);
+  color: #ff4d6d;
+  display: block;
 }
 
-/* Glow effect for final message */
-.glow{
-  animation: glowText 2s infinite alternate;
+.photo {
+  width: auto;
+  height: auto;
+  max-width: 80%;
+  max-height: 45vh;
+  object-fit: contain;
+  border: 6px solid white;
+  border-radius: 15px;
 }
 
-@keyframes glowText{
-  from{ box-shadow:0 0 10px pink; }
-  to{ box-shadow:0 0 25px red; }
-}
-
-/* Music button */
-.playButton{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:black;
-  color:white;
-  padding:12px 16px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
-  z-index:5;
-}
-
-/* Final photo that stays */
-.finalPhoto{
-  opacity:0;
-  animation: showFinal 5s forwards;
-  animation-delay:70s;
-}
-
-@keyframes showFinal{
-  0%{opacity:0;}
-  100%{opacity:1;}
+.final-card {
+  font-size: clamp(14px, 3.5vw, 18px);
+  overflow-y: auto;
+  max-height: 85vh;
 }
 </style>
 </head>
-
 <body>
 
-<!-- 🎵 Music -->
+<div class="overlay"></div>
+
+<div id="startScreen">
+  <h1 style="font-family: 'Dancing Script'; font-size: 50px; margin-bottom: 10px;">For Aishwarya ❤️</h1>
+  <p style="margin-bottom: 30px; opacity: 0.8;">A journey of us...</p>
+  <button class="start-btn" onclick="startExperience()">Open Your Gift</button>
+</div>
+
+<div id="controls">
+  <button class="control-btn" id="pauseBtn" onclick="togglePause()">⏸ Pause Presentation</button>
+</div>
+
 <audio id="music" loop>
   <source src="Bairan.mp3" type="audio/mpeg">
 </audio>
 
-<div class="playButton" onclick="playMusic()">▶ Play Music</div>
+<!-- SCENE 1 -->
+<div class="scene" id="s1">
+  <div class="text">
+    <span class="highlight">Six years ago...</span>
+    Fate brought two strangers together.<br>
+    Jesika met Aishwarya, and life changed forever.
+  </div>
+  <img src="photo1.jpg" class="photo">
+</div>
+
+<!-- SCENE 2 -->
+<div class="scene" id="s2">
+  <div class="text">
+    <span class="highlight">The "Yap" Era</span>
+    Endless phone calls, yapping about school and secrets.<br>
+    I’d listen to your voice for a lifetime if I could.
+  </div>
+  <img src="photo2.jpg" class="photo">
+</div>
+
+<!-- SCENE 3 -->
+<div class="scene" id="s3">
+  <div class="text">
+    <span class="highlight">The Missing Year...</span>
+    A year of silence where something felt empty.<br>
+    But they say souls always find their way home.<br>
+    I'm so glad we found ours.
+  </div>
+</div>
+
+<!-- SCENE 4 -->
+<div class="scene" id="s4">
+  <div class="text">
+    <span class="highlight">Reunited & Closer</span>
+    "From long calls to sharing the same roof..."<br>
+    Living together for 9 months has been the best chaos.<br>
+    I don't take a single day with you for granted.
+  </div>
+  <img src="photo4.jpg" class="photo">
+</div>
+
+<!-- SCENE 5: THE VIDEO -->
+<div class="scene" id="s5">
+  <div class="text" style="background:none; color:white; box-shadow:none; padding:10px;">
+    <span class="highlight" style="color:white;">Our Moments Captured...</span>
+  </div>
+  <div class="video-container">
+    <video id="bdVideo" playsinline>
+      <source src="our-video.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<!-- SCENE 6: THE FINAL LETTER -->
+<div class="scene" id="s6">
+  <div class="text final-card">
+    <span class="highlight">Happy 18th Birthday, Ashhh! 🎂</span>
+    <strong>2064-12-20</strong> — The day my world got its sister.<br><br>
+    Hey Ashhh, as you face your boards,<br>
+    remember: <strong>You are smarter and stronger than any exam.</strong> 📚✨<br><br>
+    I know you "hate" my hugs and kisses, but thank you for tolerating them.<br>
+    It's just my heart saying I'm lucky you're here.<br><br>
+    Angry or happy, near or far... <br>
+    <strong>I LOVE YOU SO SO MUCH.</strong> ❤️<br><br>
+    <span style="font-family:'Dancing Script'; font-size: 28px;">Forever yours, Jesika</span>
+  </div>
+</div>
 
 <script>
-function playMusic(){
+let currentSceneIndex = 0;
+let isPaused = false;
+let sceneTimer;
+const sceneDuration = 10000; // 10 seconds per scene
+const scenes = ["s1", "s2", "s3", "s4", "s5", "s6"];
+let timeLeft = sceneDuration;
+
+function startExperience() {
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("controls").style.display = "block";
   document.getElementById("music").play();
+  showNextScene();
+}
+
+function showNextScene() {
+  if (currentSceneIndex >= scenes.length) return;
+
+  // Remove active class from all
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  
+  const id = scenes[currentSceneIndex];
+  const currentScene = document.getElementById(id);
+  currentScene.classList.add('active');
+
+  const vid = document.getElementById('bdVideo');
+  if(id === 's5') {
+    vid.currentTime = 0;
+    vid.play();
+    // For the video scene, we might want it to last longer
+    timeLeft = Math.max(sceneDuration, (vid.duration * 1000) || sceneDuration);
+  } else {
+    vid.pause();
+    timeLeft = sceneDuration;
+  }
+
+  // Start the countdown for the next scene
+  startTimer();
+}
+
+function startTimer() {
+  clearTimeout(sceneTimer);
+  if (isPaused || currentSceneIndex >= scenes.length - 1) return;
+
+  sceneTimer = setTimeout(() => {
+    currentSceneIndex++;
+    showNextScene();
+  }, timeLeft);
+}
+
+function togglePause() {
+  const vid = document.getElementById('bdVideo');
+  const music = document.getElementById('music');
+  const btn = document.getElementById('pauseBtn');
+
+  if (!isPaused) {
+    // Pause everything
+    isPaused = true;
+    clearTimeout(sceneTimer);
+    music.pause();
+    vid.pause();
+    btn.innerHTML = "▶ Resume Presentation";
+    btn.style.background = "#ff4d6d";
+  } else {
+    // Resume everything
+    isPaused = false;
+    music.play();
+    if (scenes[currentSceneIndex] === 's5') vid.play();
+    btn.innerHTML = "⏸ Pause Presentation";
+    btn.style.background = "rgba(255, 255, 255, 0.2)";
+    startTimer();
+  }
 }
 
 /* Floating hearts */
 function createHeart(){
+  if (isPaused) return;
   const heart=document.createElement("div");
   heart.classList.add("heart");
   heart.innerHTML="💖";
@@ -152,68 +344,6 @@ function createHeart(){
 }
 setInterval(createHeart,500);
 </script>
-
-<!-- Scene 1 -->
-<div class="scene" style="animation-delay:0s;">
-  <div class="text">🌟 Six years ago...<br>Jesika met Aishwarya ❤️</div>
-  <img src="photo1.jpg" class="photo">
-</div>
-
-<!-- Scene 2 -->
-<div class="scene" style="animation-delay:10s;">
-  <div class="text">📞 Those long phone calls...<br>You used to yap about school and your day.</div>
-  <img src="photo2.jpg" class="photo">
-</div>
-
-<!-- Scene 3 -->
-<div class="scene" style="animation-delay:20s;">
-  <div class="text">💖 With every passing day...<br>Our bond grew deeper.</div>
-  <img src="photo3.jpg" class="photo">
-</div>
-
-<!-- Scene 4 (removed the silent treatment scene) -->
-
-<!-- Scene 5 -->
-<div class="scene" style="animation-delay:30s;">
-  <div class="text">💔 Then life happened...<br>We lost contact for one whole year.</div>
-</div>
-
-<!-- Scene 6 -->
-<div class="scene" style="animation-delay:40s;">
-  <div class="text">🤝 But in 2025...<br>We found each other again.</div>
-  <img src="photo5.jpg" class="photo">
-</div>
-
-<!-- Scene 7 -->
-<div class="scene" style="animation-delay:50s;">
-  <div class="text">🏠 Living together now for the past 8 months ❤️</div>
-  <img src="photo4.jpg" class="photo">
-</div>
-
-<!-- Final Scene -->
-<div class="scene" style="animation-delay:60s;">
-  <div class="text finalText glow">
-    🎂 Happy 18th Birthday Ashhh 🎂<br>
-    📅 Born on: <strong>2064-12-20</strong><br><br>
-    Hey Ashhh,<br>
-    Since your boards are approaching,<br>
-    I want to wish you <strong>ALL THE BEST</strong> 📚✨<br>
-    I am always just <strong>a text away</strong>.<br>
-    You can share anything that's bothering you.<br>
-    Even if you get angry sometimes, that has never been a reason to unlove you ❤️<br>
-    When I hug and kiss you, it's just my way of showing my love for you.<br>
-    I know you hate it. Thank you for tolerating me.<br>
-    I LOVE YOU SO SO SO MUCHHHH ❤️<br><br>
-    Forever your sister,<br>
-    💖 Jesika 💖
-  </div>
-</div>
-
-<!-- Final Photo That Stays -->
-<div class="scene finalPhoto" style="animation-delay:70s;">
-  <img src="finalphoto.jpg" class="photo" style="animation: zoom 20s linear forwards;">
-  <div class="text finalText" style="margin-top:20px;">💖 Forever Sisters 💖<br>Jesika & Ashhh</div>
-</div>
 
 </body>
 </html>
